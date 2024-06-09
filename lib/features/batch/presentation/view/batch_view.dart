@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:student_management_starter/features/home/presentation/navigator/home_navigator.dart';
+import 'package:student_management_starter/features/batch/presentation/viewmodel/batch_view_model.dart';
 
 class BatchView extends ConsumerWidget {
   BatchView({super.key});
@@ -9,9 +9,7 @@ class BatchView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentIndex = ref.watch(HomeViewNavigator.homeViewModelProvider);
-    final homeViewModel =
-        ref.watch(HomeViewNavigator.homeViewModelProvider.notifier);
+    var batchState = ref.watch(batchViewmodelProvider);
 
     return Scaffold(
       body: Padding(
@@ -41,6 +39,33 @@ class BatchView extends ConsumerWidget {
               ),
             ),
             // Add logic to display list of batches here
+            if (batchState.isLoading) ...{
+              const Center(
+                child: CircularProgressIndicator(),
+              ),
+            } else if (batchState.error != null) ...{
+              Text(batchState.error.toString()),
+            } else if (batchState.lstBatches.isEmpty) ...{
+              const Center(
+                child: Text("No Batches"),
+              )
+            } else ...{
+              Expanded(
+                child: ListView.builder(
+                    itemCount: batchState.lstBatches.length,
+                    itemBuilder: (context, index) {
+                      var batch = batchState.lstBatches[index];
+                      return ListTile(
+                        title: Text(batch.batchName),
+                        subtitle: Text(batch.batchId ?? ''),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {},
+                        ),
+                      );
+                    }),
+              )
+            }
           ],
         ),
       ),
