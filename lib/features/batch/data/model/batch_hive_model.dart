@@ -23,7 +23,7 @@ class BatchHiveModel {
   }) : batchId = batchId ?? const Uuid().v4();
 
   BatchHiveModel.empty()
-   : batchId = '',
+      : batchId = '',
         batchName = '';
 
   // Convert Hive Object to Entity

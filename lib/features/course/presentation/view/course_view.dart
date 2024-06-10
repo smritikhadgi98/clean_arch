@@ -3,16 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:student_management_starter/core/common/my_snackbar.dart';
 import 'package:student_management_starter/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_management_starter/features/batch/presentation/viewmodel/batch_view_model.dart';
+import 'package:student_management_starter/features/course/domain/entity/course_entity.dart';
+import 'package:student_management_starter/features/course/presentation/viewmodel/batch_view_model.dart';
 
-class BatchView extends ConsumerWidget {
-  BatchView({super.key});
+class CourseView extends ConsumerWidget {
+  CourseView({super.key});
 
-  final _batchNameController = TextEditingController();
+  final _courseNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var batchState = ref.watch(batchViewmodelProvider);
-    var batchViewModel = ref.read(batchViewmodelProvider.notifier);
+    var courseState = ref.watch(courseViewmodelProvider);
+    var courseViewModel = ref.read(courseViewmodelProvider.notifier);
 
     return Scaffold(
       body: Padding(
@@ -20,52 +22,52 @@ class BatchView extends ConsumerWidget {
         child: Column(
           children: [
             TextField(
-              controller: _batchNameController,
+              controller: _courseNameController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Batch Name',
+                labelText: 'Course Name',
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                final batchName = _batchNameController.text;
-                if (batchName.isEmpty) {
+                final courseName = _courseNameController.text;
+                if (courseName.isEmpty) {
                   showMySnackBar(message: "Field is Empty", color: Colors.red);
                 } else {
-                  batchViewModel.addBatch(BatchEntity(batchName: batchName));
-                  _batchNameController.clear();
+                  courseViewModel.addcourse(CourseEntity(courseName: courseName));
+                  _courseNameController.clear();
                 }
               },
-              child: const Text('Add Batch'),
+              child: const Text('Add Course'),
             ),
             const SizedBox(height: 16),
             const Text(
-              'List of Batches',
+              'List of Courses',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            if (batchState.isLoading) ...[
+            if (courseState.isLoading) ...[
               const Center(
                 child: CircularProgressIndicator(),
               ),
-            ] else if (batchState.error != null) ...[
-              Text(batchState.error.toString()),
-            ] else if (batchState.lstBatches.isEmpty) ...[
+            ] else if (courseState.error != null) ...[
+              Text(courseState.error.toString()),
+            ] else if (courseState.lstCourses.isEmpty) ...[
               const Center(
-                child: Text("No Batches"),
+                child: Text("No Courses"),
               )
             ] else ...[
               Expanded(
                 child: ListView.builder(
-                  itemCount: batchState.lstBatches.length,
+                  itemCount: courseState.lstCourses.length,
                   itemBuilder: (context, index) {
-                    var batch = batchState.lstBatches[index];
+                    var course = courseState.lstCourses[index];
                     return ListTile(
-                      title: Text(batch.batchName),
-                      subtitle: Text(batch.batchId ?? ''),
+                      title: Text(course.courseName),
+                      subtitle: Text(course.courseId ?? ''),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {

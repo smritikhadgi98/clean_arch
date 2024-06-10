@@ -4,26 +4,23 @@ import 'package:student_management_starter/core/failure/failure.dart';
 import 'package:student_management_starter/features/batch/domain/entity/batch_entity.dart';
 import 'package:student_management_starter/features/batch/domain/repository/batch_domain_repository.dart';
 
-final batchUsecaseProvider= Provider<BatchUseCase>(
-  (ref)=>BatchUseCase(
-  batchRepository: ref.read(batchRepositoryProvider),
-));
+final batchUsecaseProvider = Provider<BatchUseCase>((ref) => BatchUseCase(
+      batchRepository: ref.read(batchRepositoryProvider),
+    ));
 
-class BatchUseCase{
+class BatchUseCase {
   final IBatchRepository batchRepository;
 
-  BatchUseCase({ required this.batchRepository});
+  BatchUseCase({required this.batchRepository});
 
   //For adding a batch
 
-  Future<Either<Failure,bool>> addBatch(BatchEntity batch){
+  Future<Either<Failure, bool>> addBatch(BatchEntity batch) {
     return batchRepository.addBatch(batch);
   }
 
   //For getting all batches
-  Future<Either<Failure,List<BatchEntity>>> getAllBatches(){
+  Future<Either<Failure, List<BatchEntity>>> getAllBatches() {
     return batchRepository.getAllBatches();
-
-  } 
-
+  }
 }
